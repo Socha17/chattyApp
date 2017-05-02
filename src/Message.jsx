@@ -2,17 +2,18 @@
 import React, {Component} from 'react';
 
 
-class Singlemessage extends Component {
-  render() { console.log("Rendering <Message/>");
+class MessageText extends Component {
+  render() { console.log("Rendering <SingleMessage/>");
+
     return (
 
       <div>
           <div className="message">
-            <span className="message-username">Anonymous1</span>
-            <span className="message-content">I won't be impressed with technology until I can download food.</span>
+            <span className="message-username">{this.props.messageUsername}</span>
+            <span className="message-content">{this.props.messageContent}</span>
           </div>
           <div className="message system">
-            Anonymous1 changed their name to nomnom.
+
           </div>
       </div>
 
@@ -20,4 +21,4 @@ class Singlemessage extends Component {
   }
 }
 
-export default Singlemessage;
+export default MessageText;
