@@ -25,15 +25,40 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {userData: userData};
+    this.state = userData;
   }
-
 
   // componentDidMount() {
   //   setTimeout(() => {
   //     this.setState({userData: userData})  // change the state. this calls render() and the component updates.
   //   }, 1000)
   // }
+
+  insertMessage = (text) => {
+    console.log(userData.messages.length);
+    let length = this.state.messages.length + 1;
+    console.log(length);
+
+    const newMessage = {id: length, username: "bob", content: text.text};
+    const messages = this.state.messages.concat(newMessage)
+    console.log(messages);
+    this.setState({messages: messages})
+  }
+
+
+  componentDidMount() {
+    console.log("componentDidMount <App />");
+    setTimeout(() => {
+      console.log("Simulating incoming message");
+      // Add a new message to the list of messages in the data store
+      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const messages = this.state.messages.concat(newMessage)
+      // Update the state of the app component.
+      // Calling setState will trigger a call to render() in App and all child components.
+      this.setState({messages: messages})
+    }, 3000);
+  }
+
 
   render() {
 
@@ -42,8 +67,8 @@ class App extends Component {
           <nav className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
           </nav>
-          <Message userData={this.state.userData.messages}/>
-          <Chatbar  userData={this.state.userData}/>
+          <Message userData={this.state.messages}/>
+          <Chatbar  userData={this.state.currentUser} insertMessage={this.insertMessage}/>
         </div>
       );
 

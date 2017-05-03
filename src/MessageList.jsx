@@ -9,7 +9,6 @@ class Message extends Component {
 
 
   render() {  console.log("render messageList");
-            console.log(this.props.userData.username);
 
     let messages;
 
@@ -19,7 +18,6 @@ class Message extends Component {
         messageUsername={message.username}
         messageContent={message.content}/>
     );
-
 
     return (
       <main className="messages">
