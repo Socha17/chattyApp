@@ -25,7 +25,16 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = userData;
+    let exampleSocket = new WebSocket("ws://localhost:3001");
+    this.socket = exampleSocket;
+
+    this.state = {
+      currentUser: {name: "Bob"},
+      messages: [], // messages coming from the server will be stored here as they arrive
+      users: []
+    };
+
+    console.log(this.state);
   }
 
   // componentDidMount() {
@@ -34,24 +43,74 @@ class App extends Component {
   //   }, 1000)
   // }
 
-  insertMessage = (text) => {
-    console.log(userData.messages.length);
-    let length = this.state.messages.length + 1;
-    console.log(length);
+  insertName = (name) => {
+    let getOldUsername = this.state.currentUser.name
+    let newName = {name: name.text}
 
-    const newMessage = {id: length, username: "bob", content: text.text};
-    const messages = this.state.messages.concat(newMessage)
-    console.log(messages);
+    this.setState({currentUser: newName})
+
+    const postToServer = {type: "postNotification", content: `${getOldUsername} has changed their name to ${newName.name}.`};
+    this.socket.send(JSON.stringify(postToServer));
+  }
+
+  insertMessage = (text) => {
+    let length = this.state.messages.length + 1;
+    let getCurrentUser = this.state.currentUser.name
+
+    const newMessage = {id: length, username: getCurrentUser, content: text.text};
+    const messages = this.state.messages.concat(newMessage);
+
     this.setState({messages: messages})
+    newMessage.type = "postMessage"
+    this.socket.send(JSON.stringify(newMessage));
   }
 
 
+  handleNewMessage = (allData) => {
+
+    let newData = JSON.parse(allData.data);
+
+    if (newData.type === "postNotification") {
+
+      console.log("this is a postNotification from the server");
+      const insertPop = this.state.messages.concat(newData.content)
+
+      this.setState({messages: insertPop});
+      console.log(this.state);
+
+
+    } else if (newData.type === "incommingMessage") {
+      const insertMessage = this.state.messages.concat(newData)
+      this.setState({messages: insertMessage});
+    }
+
+      let userCount = newData.length
+      let userTotal = newData[userCount - 1]
+
+      const insertUsers = userTotal;
+
+      if (insertUsers != undefined) {
+        this.setState({users: insertUsers});
+        console.log(this.state);
+      }
+
+
+  }
+
   componentDidMount() {
+
+    if (this.socket) {
+      console.log("connected to server");
+    }
+
+    this.socket.onmessage = this.handleNewMessage
+
     console.log("componentDidMount <App />");
     setTimeout(() => {
+      let length2 = this.state.messages.length + 1;
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const newMessage = {id: length2, username: "Michelle", content: "Hello there!"};
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
@@ -64,11 +123,12 @@ class App extends Component {
 
       return (
         <div>
-          <nav className="navbar">
+          <nav userData={this.state.users} className="navbar">
             <a href="/" className="navbar-brand">Chatty</a>
+            <span className="usersCount">{this.state.users} Users Online</span>
           </nav>
           <Message userData={this.state.messages}/>
-          <Chatbar  userData={this.state.currentUser} insertMessage={this.insertMessage}/>
+          <Chatbar  userData={this.state.currentUser} insertMessage={this.insertMessage} insertName={this.insertName}/>
         </div>
       );
 

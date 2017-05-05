@@ -82,7 +82,7 @@
     }
 
     .navbar-brand {
-      color: inherit;
+      color: white;
       display: block;
       float: left;
       font-weight: 700;
@@ -91,4 +91,12 @@
       line-height: 60px;
       padding: 0 10px;
       text-decoration: none;
+    }
+
+
+    .usersCount {
+      margin-top: 10px;
+      color: white;
+      float: right;
+      font-size: 2em;
     }

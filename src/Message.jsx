@@ -13,7 +13,7 @@ class MessageText extends Component {
             <span className="message-content">{this.props.messageContent}</span>
           </div>
           <div className="message system">
-
+            <span>{this.props.messageNotifications}</span>
           </div>
       </div>
 
