@@ -8,8 +8,6 @@ class chatbar extends Component {
     this.state = {text: ''}
   }
 
-
-
   handleTextChange = (e) => {
     this.setState({text: e.target.value})
 
@@ -31,7 +29,6 @@ class chatbar extends Component {
   render() { console.log("render chartBar");
   let name =  this.props.userData.name
     return (
-
       <footer className="chatbar">
         <input className="chatbar-username" placeholder={name} onKeyPress={this.handleNameChange} />
         <input

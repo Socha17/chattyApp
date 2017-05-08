@@ -37,12 +37,6 @@ class App extends Component {
     console.log(this.state);
   }
 
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     this.setState({userData: userData})  // change the state. this calls render() and the component updates.
-  //   }, 1000)
-  // }
-
   insertName = (name) => {
     let getOldUsername = this.state.currentUser.name
     let newName = {name: name.text}
@@ -72,12 +66,8 @@ class App extends Component {
 
     if (newData.type === "postNotification") {
 
-      console.log("this is a postNotification from the server");
       const insertPop = this.state.messages.concat(newData.content)
-
       this.setState({messages: insertPop});
-      console.log(this.state);
-
 
     } else if (newData.type === "incommingMessage") {
       const insertMessage = this.state.messages.concat(newData)
@@ -86,22 +76,16 @@ class App extends Component {
 
       let userCount = newData.length
       let userTotal = newData[userCount - 1]
-
       const insertUsers = userTotal;
 
       if (insertUsers != undefined) {
         this.setState({users: insertUsers});
-        console.log(this.state);
       }
 
 
   }
 
   componentDidMount() {
-
-    if (this.socket) {
-      console.log("connected to server");
-    }
 
     this.socket.onmessage = this.handleNewMessage
 

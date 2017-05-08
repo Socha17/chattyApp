@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 
 
 class MessageText extends Component {
-  render() { console.log("Rendering <SingleMessage/>");
+  render() {
 
     return (
 
